@@ -1,6 +1,7 @@
 #include <iostream>
 #include <ctime>
 #include <cstdlib>
+#include <cstring>
 using namespace std;
 double add(int num);
 int getCard(bool wash);
@@ -13,10 +14,16 @@ int win_num = 0, lose_num = 0, even_num = 0;
 int main()
 {
     srand(time(NULL));
-    char YorN; int result;
     while (true){
-        cout << "\nWant to play a game(Y/N)?"; //ask whether to play the game.
-        cin >> YorN; cin.sync();
+    	char *YorNL = new char(100), YorN; int result;
+    	try{
+	        cout << "\nWant to play a game(Y/N)?"; //ask whether to play the game.
+	        cin >> YorNL;
+	        if (strlen(YorNL) != 1) throw(YorN);
+	    	YorN = YorNL[0];
+	    	delete []YorNL;
+			if(YorN != 'N' && YorN != 'n' && YorN != 'Y' && YorN != 'y') throw(YorN);}
+		catch(char) {cout << "ERROR! Please enter a valid character!"; continue;}
         getCard(true); //wash cards.
         if (YorN == 'N' || YorN == 'n'){
             cout << "Your play " << win_num+lose_num+even_num
@@ -79,13 +86,20 @@ int printCard(int card) //print the name of the card by operating the random num
 
 int player() //what player does.
 {
-    int player[11], time = 1, i; double total = 0.0; char flag;
+    int player[11], time = 1, i; double total = 0.0;
     cout << "\nYour turn:" << endl;
     player[0] = getCard(); printCard(player[0]); total += add(player[0]);
     player[1] = getCard(); printCard(player[1]); total += add(player[1]); // get the beginning two cards.
     while (true){
-        cout << endl << " Want another card(Y/N)?" ;
-        cin >> flag; cin.sync();
+    	char *flagL = new char(100), flag;
+    	try{
+	        cout << " Want another card(Y/N)?"; 
+	        cin >> flagL;
+	        if (strlen(flagL) != 1) throw(flag);
+	    	flag = flagL[0];
+	    	delete []flagL;
+			if(flag != 'N' && flag != 'n' && flag != 'Y' && flag != 'y') throw(flag);}
+		catch(char) {cout << "ERROR! Please enter a valid character!"; continue;}
         if (flag == 'N' || flag == 'n') break;
         if (flag == 'Y' || flag == 'y'){//if yes, get another card.
             time++;
